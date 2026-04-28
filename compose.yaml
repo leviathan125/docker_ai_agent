@@ -1,0 +1,38 @@
+services: #docker comppse expects
+    backend: # custom key name
+        # image: python:latest
+        build: # docker compose up --build
+            context: ./backend # path to the directory where the Dockerfile is located
+            dockerfile: Dockerfile
+        ports: 
+            - "8080:8000"
+        command: uvicorn main:app --host 0.0.0.0 --port 8000
+        # environment variables are run time variables, if you don't care if some one can see them put them in the envrionment section 
+        environment:
+            - PORT=8000
+            - MY_PROJ=Agentic AI
+        # if you care about security and don't want to put your environment variables in the docker compose file and will be injected at runtime, you can put them in a .env file and then reference that file in the docker compose file
+        env_file:
+            - .env.sample
+        volumes:
+            - ./backend/src:/app
+        develop:
+            watch:
+                - action: rebuild
+                  path: backend/requirements.txt
+                - action: rebuild
+                  path: backend/Dockerfile
+                - action: restart
+                  path: backend/src/
+    static_html: # custom key name
+        # image: python:latest
+        build: # docker compose up --build
+            context: ./static_html # path to the directory where the Dockerfile is located
+            dockerfile: static.Dockerfile
+        ports: 
+            - "2000:8000"
+            - "3000:8000"
+            - "8000:8000"
+        command: python -m http.server 8000
+        volumes:
+            - ./static_html/src:/app
