@@ -22,4 +22,4 @@ CMD [ "python", "-m", "http.server", "8000" ]
 # docker compose run backend /bin/bash
 # cd /opt/venv/bin
 # ls
-# this shows all of the different executables that are available in the virtual environment, including pip and python
+# this shows all of the different executables that are available in the virtual environment, including pip and pythonssh-keygen -t ed25519 -C "your_email@example.com"
