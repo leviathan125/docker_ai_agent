@@ -1,5 +1,6 @@
 fastapi==0.136.1
 uvicorn[standard]
 requests
-sqlmodel # postgres, maridb, mysql, sqlite, oracle, mssql
-psycopg[binary] # postgres with python
+sqlmodel==0.0.22 # postgres, maridb, mysql, sqlite, oracle, mssql
+sqlalchemy==2.0.41 # pinned to ensure psycopg v3 driver support
+psycopg[binary]==3.2.9 # postgres with python (psycopg v3, NOT psycopg2)
