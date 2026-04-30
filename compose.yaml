@@ -16,6 +16,8 @@ services: #docker comppse expects
             - .env.sample
         volumes:
             - ./backend/src:/app
+        depends_on:
+            - db_service
         develop:
             watch:
                 - action: rebuild
@@ -24,15 +26,31 @@ services: #docker comppse expects
                   path: backend/Dockerfile
                 - action: restart
                   path: backend/src/
-    static_html: # custom key name
-        # image: python:latest
-        build: # docker compose up --build
-            context: ./static_html # path to the directory where the Dockerfile is located
-            dockerfile: static.Dockerfile
-        ports: 
-            - "2000:8000"
-            - "3000:8000"
-            - "8000:8000"
-        command: python -m http.server 8000
+    
+    # database_url=postgresql+psycopg://db_user:db_password@db_service:5432/db_name
+    db_service:
+        image: postgres:17
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_USER=db_user
+            - POSTGRES_PASSWORD=db_password
+            - POSTGRES_DB=db_name
+        # env_file:
+        #     - ./env.sample-db
         volumes:
-            - ./static_html/src:/app
+            - dc_managed_db_volume:/var/lib/postgresql/data # this is a docker managed volume, it will persist even if the container is deleted, and it will be automatically created by docker when the container is run for the first time. You can also create it manually using the command "docker volume create dc_managed_db_volume"
+    # static_html: # custom key name
+    #     # image: python:latest
+    #     build: # docker compose up --build
+    #         context: ./static_html # path to the directory where the Dockerfile is located
+    #         dockerfile: static.Dockerfile
+    #     ports: 
+    #         - "2000:8000"
+    #         - "3000:8000"
+    #         - "8000:8000"
+    #     command: python -m http.server 8000
+    #     volumes:
+    #         - ./static_html/src:/app
+volumes:
+    dc_managed_db_volume: # docker managed volume
