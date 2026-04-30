@@ -20,7 +20,7 @@ COPY ./src .
 
 # to run a server on a container you need to tell the computer it is okay for docker to run the server:
 # docker run -it -p "port_number":"port_out" image_name
-CMD [ "python", "-m", "http.server", "8000" ]
+CMD [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000" ]
 
 
 # docker compose run backend /bin/bash
