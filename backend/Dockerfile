@@ -2,6 +2,10 @@
 #from image_name:tag
 FROM python:latest
 
+# host.docker.internal instead of localhost, this is because the container has its own network and cannot access the host machine's network directly, so we use host.docker.internal to access the host machine's network from within the container. This is especially important for accessing the database service that is running on the host machine, which is necessary for the backend application to function properly.
+# curl -X POST -d '{"message": "Hello, World!"}' http://host.docker.internal:8080/api/chats/
+RUN apt-get update && apt-get install -y curl
+
 # Create a python virtual environment (optional but recommended)
 # this is to isolate the dependencies of the application from the system python
 RUN python -m venv /opt/venv/
